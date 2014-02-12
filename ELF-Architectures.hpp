@@ -1,0 +1,6 @@
+#ifndef ELFARCHITECTURES_HPP
+#define ELFARCHITECTURES_HPP
+
+#include "ELF-x86.hpp"
+
+#endif // ELFARCHITECTURES_HPP
