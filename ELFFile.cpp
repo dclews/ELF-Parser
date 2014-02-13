@@ -61,7 +61,7 @@ void ELFFile::printType()
     printf("[ELF] Type is ");
     switch(elfHeader->e_type)
     {
-        case ET_CORE:  printf("CORE"); break;
+        case ET_CORE:printf("CORE"); break;
         case ET_DYN: printf("Shared Object"); break;
         case ET_REL: printf("Relocatable"); break;
         case ET_EXEC: printf("Exectutable"); break;

@@ -6,7 +6,7 @@
 #include "ELF-ProgramHeader.hpp"
 #include "ELF-Architectures.hpp"
 
-//Source: http:/*!www.skyfree.org/linux/references/ELF_Format.pdf
+//Source: http://www.skyfree.org/linux/references/ELF_Format.pdf
 
 enum e_types
 {
