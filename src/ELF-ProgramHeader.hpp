@@ -43,5 +43,11 @@ enum p_type
     PT_LOPROC   = 0x70000000, //!< Values inclusively between LOPROC and HIPROC are reserved for processor-specific semantics.
     PT_HIPROC   = 0x7fffffff  //!< Values inclusively between LOPROC and HIPROC are reserved for processor-specific semantics.
 };
+//Source: linux/elf.h
+enum pf_flags {
+    PF_X    = 0x1,
+    PF_W    = 0x2,
+    PF_R    = 0x4
+};
 
 #endif // ELFPROGRAMHEADER_HPP

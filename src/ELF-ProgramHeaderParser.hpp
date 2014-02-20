@@ -13,6 +13,7 @@ namespace ELF
         void printHeaders();
         void printHeader(const Elf32_Phdr* progHeader);
         void printType(const Elf32_Phdr* progHeader);
+        void printFlags(const Elf32_Phdr* progHeader);
     public:
         PHTParser(const Elf32Ehdr* elfHeader);
         void print();

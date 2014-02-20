@@ -1,4 +1,5 @@
 #include "ELF-ProgramHeaderParser.hpp"
+#include <string.h>
 
 namespace ELF
 {
@@ -14,19 +15,19 @@ namespace ELF
             return;
         }
         printf("Number of program headers: %u\n", elfHeader->e_phnum);
-        printf("Type\tOffset\tVirtAddr\tPhysAddr\tFileSize\tMemSize\t\tFlag\t\tAlign\n");
+        printf("%-5s%-14s%-14s%-14s%-14s%-14s%-14s%-8s%-14s\n", "[ #]", "Type", "Offset", "Virt Addr", "Phys Addr", "File Size", "Mem Size","Flags","Align");
+
 
         const char* progHeaderBase = ((const char*) (elfHeader)) + elfHeader->e_phoff;
-//        printf("Prog Header base: %p\n", progHeaderBase);
-//        printf("Program header size: %#08x\n", elfHeader->e_phentsize);
 
         for(int i=0;i<elfHeader->e_phnum;i++)
         {
             unsigned int headerOffset = elfHeader->e_phentsize * i;
-            //printf("Program header offset: %#08x\n", headerOffset);
+            printf("[%2d]%-1s", i, " ");
 
             const Elf32_Phdr* progHeader = (Elf32_Phdr*) (progHeaderBase + headerOffset);
             printHeader(progHeader);
+            printf("\n");
         }
     }
 
@@ -37,29 +38,48 @@ namespace ELF
             return;
         }
         printType(progHeader);
-        printf("\t%p", progHeader->p_offset);
-        printf("\t%p", progHeader->p_vaddr);
-        printf("\t\t%p", progHeader->p_paddr);
-        printf("\t\t%#08x", progHeader->p_filesz);
-        printf("\t%#08x", progHeader->p_memsz);
-        printf("\t%#08x", progHeader->p_flags);
-        printf("\t%#08x", progHeader->p_align);
-
-        printf("\n");
+        printf("%-14p", progHeader->p_offset);
+        printf("%-14p", progHeader->p_vaddr);
+        printf("%-14p", progHeader->p_paddr);
+        printf("%-14x", progHeader->p_filesz);
+        printf("%-14x", progHeader->p_memsz);
+        printFlags(progHeader);
+        printf("%-14x", progHeader->p_align);
     }
     void PHTParser::printType(const Elf32_Phdr* progHeader)
     {
-        //printf("[ELF::PH] Type is ");
+        char buffer[20];
+        memset(buffer, 0, sizeof(char) * 20);
+
         switch(progHeader->p_type)
         {
-            case PT_NULL: printf("UNDEF"); break;
-            case PT_LOAD: printf("LOAD"); break;
-            case PT_DYNAMIC: printf("DYNAMIC"); break;
-            case PT_INTERP: printf("INTERP"); break;
-            case PT_NOTE: printf("NOTE"); break;
-            case PT_SHLIB: printf("SHLIB (ABI BREAK!)"); break;
-            default: printf("%#08x", progHeader->p_type);
+            case PT_NULL: sprintf(buffer, "UNDEF"); break;
+            case PT_LOAD: sprintf(buffer, "LOAD"); break;
+            case PT_DYNAMIC: sprintf(buffer, "DYNAMIC"); break;
+            case PT_INTERP: sprintf(buffer, "INTERP"); break;
+            case PT_NOTE: sprintf(buffer, "NOTE"); break;
+            case PT_SHLIB: sprintf(buffer, "SHLIB (ABI BREAK!)"); break;
+            default: sprintf(buffer, "%#08x", progHeader->p_type);
         }
-        //printf(".\n");
+        printf("%-14s", buffer);
+    }
+    void PHTParser::printFlags(const Elf32_Phdr* progHeader)
+    {
+        char flagStr[4];
+        memset(flagStr, 0, sizeof(char));
+
+        if(progHeader->p_flags & PF_R)
+        {
+            sprintf(flagStr, "R");
+        }
+        if(progHeader->p_flags & PF_W)
+        {
+            sprintf(flagStr + strlen(flagStr), "W");
+        }
+        if(progHeader->p_flags & PF_X)
+        {
+            sprintf(flagStr + strlen(flagStr), "X");
+        }
+        printf("%-8s", flagStr);
     }
 }

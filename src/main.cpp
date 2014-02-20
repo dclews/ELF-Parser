@@ -8,7 +8,7 @@ int main()
 {
     //FILE *f = fopen("/usr/lib32/libpng.so", "rb");
     //FILE *f = fopen("/home/dan/ELF-Files/bash", "rb");
-    FILE *f = fopen("/bin/bash", "rb");
+    FILE *f = fopen("bash", "rb");
 
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);

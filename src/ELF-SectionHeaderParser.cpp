@@ -2,9 +2,7 @@
 
 SHTParser::SHTParser(const Elf32Ehdr* elfHeader) : elfHeader(elfHeader), sectionHeaderBase(((const char*) elfHeader) + elfHeader->e_shoff)
 {
-    printf("SHTParser\n");
     strtab = (Elf32_Shdr*) (sectionHeaderBase + (elfHeader->e_shentsize * elfHeader->e_shstrndx));
-    printHeader((Elf32_Shdr*) strtab);
 }
 void SHTParser::print()
 {
@@ -30,15 +28,15 @@ void SHTParser::print()
 void SHTParser::printHeader(const Elf32_Shdr* sectionHeader)
 {
     printName(sectionHeader);
-    //printf("\t");
     printType(sectionHeader);
-    //printf("\t");
     printFlags(sectionHeader);
     printf("\n");
 }
 void SHTParser::printType(const Elf32_Shdr* sectionHeader)
 {
     char buffer[20];
+    memset(buffer, 0, sizeof(char) * 20);
+
     switch(sectionHeader->sh_type)
     {
         case SHT_NULL: sprintf(buffer, "%-10s", "NULL"); break;
@@ -57,7 +55,6 @@ void SHTParser::printType(const Elf32_Shdr* sectionHeader)
     }
 
     printf("%-14s", buffer);
-//    //printf(".\n");
 }
 void SHTParser::printName(const Elf32_Shdr* sectionHeader)
 {
