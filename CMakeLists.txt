@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 SET(NAME "ELF-Parser")
 project (${NAME})
 
+SET(CMAKE_CXX_FLAGS "-pedantic -Wall")
 
 MESSAGE(STATUS "CXX Flags: " ${CMAKE_CXX_FLAGS})
 # Grab all of the CPP files in src and subdirectories; store in CPP_SRCS

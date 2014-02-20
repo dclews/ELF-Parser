@@ -4,11 +4,14 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
     //FILE *f = fopen("/usr/lib32/libpng.so", "rb");
     //FILE *f = fopen("/home/dan/ELF-Files/bash", "rb");
-    FILE *f = fopen("bash", "rb");
+
+    const char* file = (argc > 1) ? argv[1] : "bash";
+
+    FILE *f = fopen(file, "rb");
 
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);
