@@ -13,9 +13,11 @@ void ELFFile::Print()
     //printSectionHeaders();
     //printProgramHeaders();
 
+    printf("\n");
     PHTParser phtParser(elfHeader);
     phtParser.print();
 
+    printf("\n");
     SHTParser shtParser(elfHeader);
     shtParser.print();
 }

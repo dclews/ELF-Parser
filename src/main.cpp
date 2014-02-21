@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 
     const char* file = (argc > 1) ? argv[1] : "bash";
 
-    FILE *f = fopen(file, "rb");
+    FILE* f = fopen(file, "rb");
 
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);
