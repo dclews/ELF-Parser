@@ -1,96 +1,99 @@
 #include "ELF-SectionHeaderParser.hpp"
 
-SHTParser::SHTParser(const Elf32Ehdr* elfHeader) : elfHeader(elfHeader), sectionHeaderBase(((const char*) elfHeader) + elfHeader->e_shoff)
+namespace ELF
 {
-    shstrtab = (Elf32_Shdr*) (sectionHeaderBase + (elfHeader->e_shentsize * elfHeader->e_shstrndx));
-}
-void SHTParser::print()
-{
-    if(elfHeader->e_shnum <= 0)
+    SHTParser::SHTParser(const Elf32Ehdr* elfHeader) : elfHeader(elfHeader), sectionHeaderBase(((const char*) elfHeader) + elfHeader->e_shoff)
     {
-        printf("[ELF] File has no section headers.\n");
-        return;
+        shstrtab = (Elf32_Shdr*) (sectionHeaderBase + (elfHeader->e_shentsize * elfHeader->e_shstrndx));
     }
-    printf("Number of section headers: %u\n", elfHeader->e_shnum);
-    printf("%-5s%-25s%-14s%-8s\n", "[ #]", "Name", "Type", "Flags");
-
-    const char* sectionHeaderBase = ((const char*) elfHeader) + elfHeader->e_shoff;
-
-    for(int i=0;i<elfHeader->e_shnum;i++)
+    void SHTParser::print()
     {
-        unsigned int headerOffset = elfHeader->e_shentsize * i;
-        const Elf32_Shdr* sectionHeader = (Elf32_Shdr*) (sectionHeaderBase + headerOffset);
-
-        printf("[%2d]%-1s", i, " ");
-        printHeader(sectionHeader);
-    }
-}
-void SHTParser::printHeader(const Elf32_Shdr* sectionHeader)
-{
-    printName(sectionHeader);
-    printType(sectionHeader);
-    printFlags(sectionHeader);
-    printf("\n");
-}
-void SHTParser::printType(const Elf32_Shdr* sectionHeader)
-{
-    char buffer[20];
-    memset(buffer, 0, sizeof(char) * 20);
-
-    if(sectionHeader->sh_type >= SHT_LOOS && sectionHeader->sh_type <= SHT_HIOS)
-    {
-        sprintf(buffer, "OS");
-    }
-    else if(sectionHeader->sh_type >= SHT_LOPROC && sectionHeader->sh_type <= SHT_HIPROC)
-    {
-        sprintf(buffer, "PROC");
-    }
-    else
-    {
-        switch(sectionHeader->sh_type)
+        if(elfHeader->e_shnum <= 0)
         {
-            case SHT_NULL: sprintf(buffer, "%-10s", "NULL"); break;
-            case SHT_HASH: sprintf(buffer, "%-10s", "HASH"); break;
-            case SHT_DYNSYM: sprintf(buffer, "%-10s", "DYNSYM"); break;
-            case SHT_NOTE: sprintf(buffer, "%-10s", "NOTE"); break;
-            case SHT_PROGBITS: sprintf(buffer, "%-10s", "PROGBITS"); break;
-            case SHT_REL: sprintf(buffer, "%-10s", "REL"); break;
-            case SHT_RELA: sprintf(buffer, "%-10s", "RELA"); break;
-            case SHT_SHLIB: sprintf(buffer, "%-10s", "SHLIB"); break;
-            case SHT_STRTAB: sprintf(buffer, "%-10s", "STRTAB"); break;
-            case SHT_SYMTAB: sprintf(buffer, "%-10s", "SYMTAB"); break;
-            case SHT_NOBITS: sprintf(buffer, "%-10s", "NOBITS"); break;
-            case SHT_DYNAMIC: sprintf(buffer, "%-10s", "DYNAMIC"); break;
-            default: sprintf(buffer, "%#08x", sectionHeader->sh_type);
+            printf("[ELF] File has no section headers.\n");
+            return;
+        }
+        printf("Number of section headers: %u\n", elfHeader->e_shnum);
+        printf("%-5s%-25s%-14s%-8s\n", "[ #]", "Name", "Type", "Flags");
+
+        const char* sectionHeaderBase = ((const char*) elfHeader) + elfHeader->e_shoff;
+
+        for(int i=0;i<elfHeader->e_shnum;i++)
+        {
+            unsigned int headerOffset = elfHeader->e_shentsize * i;
+            const Elf32_Shdr* sectionHeader = (Elf32_Shdr*) (sectionHeaderBase + headerOffset);
+
+            printf("[%2d]%-1s", i, " ");
+            printHeader(sectionHeader);
         }
     }
+    void SHTParser::printHeader(const Elf32_Shdr* sectionHeader)
+    {
+        shtStrings s;
+        nameToString(sectionHeader, s.name, SHT_NAME_BUF_MAX);
+        printf("%-25s", s.name);
 
-    printf("%-14s", buffer);
-}
-void SHTParser::printName(const Elf32_Shdr* sectionHeader)
-{
-    printf("%-25s", (char*) elfHeader + shstrtab->sh_offset + sectionHeader->sh_name);
-}
-void SHTParser::printFlags(const Elf32_Shdr* sectionHeader)
-{
-    char flagStr[5];
-    memset(flagStr, 0, sizeof(char));
+        typeToString(sectionHeader, s.type, SHT_TYPE_BUF_MAX);
+        printf("%-14s", s.type);
 
-    if(sectionHeader->sh_flags & SHF_ALLOC)
-    {
-        sprintf(flagStr, "A");
+        flagsToString(sectionHeader, s.flags, SHT_FLAGS_BUF_MAX);
+        printf("%-8s\n", s.flags);
     }
-    if(sectionHeader->sh_flags & SHF_EXECINSTR)
+    void SHTParser::typeToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen)
     {
-        sprintf(flagStr + strlen(flagStr), "X");
+        if(sectionHeader->sh_type >= SHT_LOOS && sectionHeader->sh_type <= SHT_HIOS)
+        {
+            snprintf(buffer, maxlen, "OS");
+        }
+        else if(sectionHeader->sh_type >= SHT_LOPROC && sectionHeader->sh_type <= SHT_HIPROC)
+        {
+            snprintf(buffer, maxlen, "PROC");
+        }
+        else
+        {
+            switch(sectionHeader->sh_type)
+            {
+                case SHT_NULL: snprintf(buffer, maxlen, "%-10s", "NULL"); break;
+                case SHT_HASH: snprintf(buffer, maxlen, "%-10s", "HASH"); break;
+                case SHT_DYNSYM: snprintf(buffer, maxlen, "%-10s", "DYNSYM"); break;
+                case SHT_NOTE: snprintf(buffer, maxlen, "%-10s", "NOTE"); break;
+                case SHT_PROGBITS: snprintf(buffer, maxlen, "%-10s", "PROGBITS"); break;
+                case SHT_REL: snprintf(buffer, maxlen, "%-10s", "REL"); break;
+                case SHT_RELA: snprintf(buffer, maxlen, "%-10s", "RELA"); break;
+                case SHT_SHLIB: snprintf(buffer, maxlen, "%-10s", "SHLIB"); break;
+                case SHT_STRTAB: snprintf(buffer, maxlen, "%-10s", "STRTAB"); break;
+                case SHT_SYMTAB: snprintf(buffer, maxlen, "%-10s", "SYMTAB"); break;
+                case SHT_NOBITS: snprintf(buffer, maxlen, "%-10s", "NOBITS"); break;
+                case SHT_DYNAMIC: snprintf(buffer, maxlen, "%-10s", "DYNAMIC"); break;
+                default: snprintf(buffer, maxlen, "%#08x", sectionHeader->sh_type);
+            }
+        }
     }
-    if(sectionHeader->sh_flags & SHF_WRITE)
+    void SHTParser::nameToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen)
     {
-        sprintf(flagStr + strlen(flagStr), "W");
+        snprintf(buffer, maxlen, (char*) elfHeader + shstrtab->sh_offset + sectionHeader->sh_name);
     }
-    if(sectionHeader->sh_flags & SHF_MASKPROC)
+    void SHTParser::flagsToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen)
     {
-        sprintf(flagStr + strlen(flagStr), "MS");
+        char flagStr[5];
+        memset(flagStr, 0, sizeof(char));
+
+        if(sectionHeader->sh_flags & SHF_ALLOC)
+        {
+            sprintf(flagStr, "A");
+        }
+        if(sectionHeader->sh_flags & SHF_EXECINSTR)
+        {
+            sprintf(flagStr + strlen(flagStr), "X");
+        }
+        if(sectionHeader->sh_flags & SHF_WRITE)
+        {
+            sprintf(flagStr + strlen(flagStr), "W");
+        }
+        if(sectionHeader->sh_flags & SHF_MASKPROC)
+        {
+            sprintf(flagStr + strlen(flagStr), "MS");
+        }
+        printf("%-8s", flagStr);
     }
-    printf("%-8s", flagStr);
 }

@@ -5,20 +5,35 @@
 #include "StringUtil.hpp"
 #include <string.h>
 
-class SHTParser
+#define SHT_TYPE_BUF_MAX 20
+#define SHT_NAME_BUF_MAX 20
+#define SHT_FLAGS_BUF_MAX 4
+
+namespace ELF
 {
-private:
-    const Elf32Ehdr* elfHeader;
-    Elf32_Shdr* shstrtab;
-    const char* sectionHeaderBase;
-    void printHeaders();
-    void printHeader(const Elf32_Shdr* sectionHeader);
-    void printType(const Elf32_Shdr* sectionHeader);
-    void printName(const Elf32_Shdr* sectionHeader);
-    void printFlags(const Elf32_Shdr* sectionHeader);
-public:
-    SHTParser(const Elf32Ehdr* elfHeader);
-    void print();
-};
+    typedef struct
+    {
+        char name[SHT_NAME_BUF_MAX];
+        char type[SHT_TYPE_BUF_MAX];
+        char flags[SHT_FLAGS_BUF_MAX];
+    } shtStrings;
+
+    class SHTParser
+    {
+    private:
+        const Elf32Ehdr* elfHeader;
+        Elf32_Shdr* shstrtab;
+        const char* sectionHeaderBase;
+        void printHeaders();
+        void printHeader(const Elf32_Shdr* sectionHeader);
+        void typeToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen);
+        void nameToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen);
+        void flagsToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen);
+    public:
+        SHTParser(const Elf32Ehdr* elfHeader);
+        void print();
+    };
+}
+
 
 #endif // ELFSECTIONHEADERPARSER_HPP

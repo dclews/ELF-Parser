@@ -13,10 +13,11 @@ void ELFFile::Print()
     printf("[ELF] Entry Point Address: %#08x\n", elfHeader->e_entry);
     printf("\n");
 
+    phtStrings p;
     PHTParser phtParser(elfHeader);
     phtParser.print();
-
     printf("\n");
+
     SHTParser shtParser(elfHeader);
     shtParser.print();
 }
