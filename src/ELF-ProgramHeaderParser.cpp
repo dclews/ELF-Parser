@@ -45,6 +45,10 @@ namespace ELF
         printf("%-14x", progHeader->p_memsz);
         printFlags(progHeader);
         printf("%-14x", progHeader->p_align);
+        if(progHeader->p_type == PT_INTERP)
+        {
+            printf("\n     [%s]", (char*) elfHeader + progHeader->p_offset);
+        }
     }
     void PHTParser::printType(const Elf32_Phdr* progHeader)
     {
