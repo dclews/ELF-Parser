@@ -3,9 +3,10 @@
 
 #include "ELF-Identification.hpp"
 #include "ELF-SectionHeader.hpp"
+#include "ELF-SectionHeaderGNU.hpp"
 #include "ELF-ProgramHeader.hpp"
+#include "ELF-ProgramHeaderGNU.hpp"
 #include "ELF-Architectures.hpp"
-
 //Source: http://www.skyfree.org/linux/references/ELF_Format.pdf
 
 enum e_types

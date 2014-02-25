@@ -33,10 +33,10 @@ namespace ELF
 
     void PHTParser::printHeader(const Elf32_Phdr* progHeader)
     {
-        if((progHeader->p_type == PT_NULL || progHeader->p_type > PT_PHDR) && !((progHeader->p_type >= PT_LOPROC) && progHeader->p_type <= PT_HIPROC))
-        {
-            return;
-        }
+//        if((progHeader->p_type == PT_NULL || progHeader->p_type > PT_PHDR) && !((progHeader->p_type >= PT_LOPROC) && progHeader->p_type <= PT_HIPROC))
+//        {
+//            return;
+//        }
         printType(progHeader);
         printf("%-14p", progHeader->p_offset);
         printf("%-14p", progHeader->p_vaddr);
@@ -57,7 +57,13 @@ namespace ELF
 
         if(progHeader->p_type >= PT_LOOS && progHeader->p_type <= PT_HIOS)
         {
-            sprintf(buffer, "OS");
+            switch(progHeader->p_type)
+            {
+                case PT_GNU_EH_FRAME: sprintf(buffer, "GNU_EH_FRAME"); break;
+                case PT_GNU_STACK: sprintf(buffer, "GNU_STACK"); break;
+                case PT_GNU_RELRO: sprintf(buffer, "GNU_RELRO"); break;
+                default: sprintf(buffer, "OS %#08x", progHeader->p_type);
+            }
         }
         else if(progHeader->p_type >= PT_LOPROC && progHeader->p_type <= PT_HIPROC)
         {
