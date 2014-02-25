@@ -10,6 +10,7 @@ ELFFile::ELFFile(const char* elfFile) : elfFile(elfFile)
 void ELFFile::Print()
 {
     printIdentificationBytes();
+    printf("[ELF] Entry Point Address: %#08x\n", elfHeader->e_entry);
     //printSectionHeaders();
     //printProgramHeaders();
 
