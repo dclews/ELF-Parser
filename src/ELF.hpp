@@ -28,7 +28,13 @@ enum e_machines
     EM_68K      = 4, /*!< Motorolla 68000 */
     EM_86K      = 5, /*!< Motorolla 88000 */
     EM_860      = 7, /*!< Intel 80860 */
-    EM_MIPS     = 8  /*!< MIPS RS3000 */
+    EM_MIPS     = 8, /*!< MIPS RS3000 */
+    //Source: http://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+    EM_PPC      = 0x14, //!< PowerPC
+    EM_ARM      = 0x28, //!< ARM 32
+    EM_IA64     = 0x32, //!< Itanium
+    EM_x86_64   = 0x3E, //!< x86_64
+    EM_AARCH64  = 0xB7  //!< ARM 64
 };
 enum e_versions
 {

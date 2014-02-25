@@ -54,6 +54,11 @@ void ELFFile::printMachine()
         case EM_MIPS: printf("MIPS"); break;
         case EM_SPARC: printf("SPARC"); break;
         case EM_NONE: printf("not specified."); break;
+        case EM_PPC: printf("PowerPC"); break;
+        case EM_ARM: printf("ARM"); break;
+        case EM_IA64: printf("IA64 (Itanium)"); break;
+        case EM_x86_64: printf("x86_64"); break;
+        case EM_AARCH64: printf("AArch64 (ARM)"); break;
         default: printf("unknown: %#08x", elfHeader->e_machine);
     }
     printf("\n");
