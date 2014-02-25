@@ -11,10 +11,8 @@ void ELFFile::Print()
 {
     printIdentificationBytes();
     printf("[ELF] Entry Point Address: %#08x\n", elfHeader->e_entry);
-    //printSectionHeaders();
-    //printProgramHeaders();
-
     printf("\n");
+
     PHTParser phtParser(elfHeader);
     phtParser.print();
 
