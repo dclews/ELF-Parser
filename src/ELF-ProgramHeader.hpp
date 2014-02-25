@@ -40,6 +40,9 @@ enum p_type
                           table is part of the memory image of the program. If it is present, it must precede any
                           loadable segment entry. */
 
+    PT_LOOS     = 0x60000000, //!< Values inclusively between LOOS and HIOS are reserved for environment specific semantics.
+    PT_HIOS     = 0x6FFFFFFF, //!< Values inclusively between LOOS and HIOS are reserved for environment specific semantics.
+
     PT_LOPROC   = 0x70000000, //!< Values inclusively between LOPROC and HIPROC are reserved for processor-specific semantics.
     PT_HIPROC   = 0x7fffffff  //!< Values inclusively between LOPROC and HIPROC are reserved for processor-specific semantics.
 };

@@ -51,15 +51,27 @@ namespace ELF
         char buffer[20];
         memset(buffer, 0, sizeof(char) * 20);
 
-        switch(progHeader->p_type)
+        if(progHeader->p_type >= PT_LOOS && progHeader->p_type <= PT_HIOS)
         {
-            case PT_NULL: sprintf(buffer, "UNDEF"); break;
-            case PT_LOAD: sprintf(buffer, "LOAD"); break;
-            case PT_DYNAMIC: sprintf(buffer, "DYNAMIC"); break;
-            case PT_INTERP: sprintf(buffer, "INTERP"); break;
-            case PT_NOTE: sprintf(buffer, "NOTE"); break;
-            case PT_SHLIB: sprintf(buffer, "SHLIB (ABI BREAK!)"); break;
-            default: sprintf(buffer, "%#08x", progHeader->p_type);
+            sprintf(buffer, "OS");
+        }
+        else if(progHeader->p_type >= PT_LOPROC && progHeader->p_type <= PT_HIPROC)
+        {
+            sprintf(buffer, "PROC");
+        }
+        else
+        {
+            switch(progHeader->p_type)
+            {
+                case PT_NULL: sprintf(buffer, "UNDEF"); break;
+                case PT_LOAD: sprintf(buffer, "LOAD"); break;
+                case PT_PHDR: sprintf(buffer, "PHDR"); break;
+                case PT_DYNAMIC: sprintf(buffer, "DYNAMIC"); break;
+                case PT_INTERP: sprintf(buffer, "INTERP"); break;
+                case PT_NOTE: sprintf(buffer, "NOTE"); break;
+                case PT_SHLIB: sprintf(buffer, "SHLIB (ABI BREAK!)"); break;
+                default: sprintf(buffer, "%#08x", progHeader->p_type);
+            }
         }
         printf("%-14s", buffer);
     }

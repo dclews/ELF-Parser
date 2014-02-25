@@ -37,21 +37,32 @@ void SHTParser::printType(const Elf32_Shdr* sectionHeader)
     char buffer[20];
     memset(buffer, 0, sizeof(char) * 20);
 
-    switch(sectionHeader->sh_type)
+    if(sectionHeader->sh_type >= SHT_LOOS && sectionHeader->sh_type <= SHT_HIOS)
     {
-        case SHT_NULL: sprintf(buffer, "%-10s", "NULL"); break;
-        case SHT_HASH: sprintf(buffer, "%-10s", "HASH"); break;
-        case SHT_DYNSYM: sprintf(buffer, "%-10s", "DYNSYM"); break;
-        case SHT_NOTE: sprintf(buffer, "%-10s", "NOTE"); break;
-        case SHT_PROGBITS: sprintf(buffer, "%-10s", "PROGBITS"); break;
-        case SHT_REL: sprintf(buffer, "%-10s", "REL"); break;
-        case SHT_RELA: sprintf(buffer, "%-10s", "RELA"); break;
-        case SHT_SHLIB: sprintf(buffer, "%-10s", "SHLIB"); break;
-        case SHT_STRTAB: sprintf(buffer, "%-10s", "STRTAB"); break;
-        case SHT_SYMTAB: sprintf(buffer, "%-10s", "SYMTAB"); break;
-        case SHT_NOBITS: sprintf(buffer, "%-10s", "NOBITS"); break;
-        case SHT_DYNAMIC: sprintf(buffer, "%-10s", "DYNAMIC"); break;
-        default: sprintf(buffer, "%#08x", sectionHeader->sh_type);
+        sprintf(buffer, "OS");
+    }
+    else if(sectionHeader->sh_type >= SHT_LOPROC && sectionHeader->sh_type <= SHT_HIPROC)
+    {
+        sprintf(buffer, "PROC");
+    }
+    else
+    {
+        switch(sectionHeader->sh_type)
+        {
+            case SHT_NULL: sprintf(buffer, "%-10s", "NULL"); break;
+            case SHT_HASH: sprintf(buffer, "%-10s", "HASH"); break;
+            case SHT_DYNSYM: sprintf(buffer, "%-10s", "DYNSYM"); break;
+            case SHT_NOTE: sprintf(buffer, "%-10s", "NOTE"); break;
+            case SHT_PROGBITS: sprintf(buffer, "%-10s", "PROGBITS"); break;
+            case SHT_REL: sprintf(buffer, "%-10s", "REL"); break;
+            case SHT_RELA: sprintf(buffer, "%-10s", "RELA"); break;
+            case SHT_SHLIB: sprintf(buffer, "%-10s", "SHLIB"); break;
+            case SHT_STRTAB: sprintf(buffer, "%-10s", "STRTAB"); break;
+            case SHT_SYMTAB: sprintf(buffer, "%-10s", "SYMTAB"); break;
+            case SHT_NOBITS: sprintf(buffer, "%-10s", "NOBITS"); break;
+            case SHT_DYNAMIC: sprintf(buffer, "%-10s", "DYNAMIC"); break;
+            default: sprintf(buffer, "%#08x", sectionHeader->sh_type);
+        }
     }
 
     printf("%-14s", buffer);

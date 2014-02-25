@@ -94,8 +94,10 @@ enum sh_types
 
     SHT_SHLIB       = 10, //!< This section type is reserved but has unspecified semantics. Programs that contain a section of this type do not conform to the ABI.
     SHT_DYNSYM      = 11, //!< See Symbol tables below.
+    SHT_LOOS        = 0x60000000, //!< Values inclusively between LOOS and HIOS are reserved for environment specific semantics.
+    SHT_HIOS        = 0x6FFFFFFF, //!< Values inclusively between LOOS and HIOS are reserved for environment specific semantics.
     SHT_LOPROC      = 0x70000000, //!< Values between LOPROC and HIPROC (inclusively) are reserved for processor specific semantics.
-    SHT_HIPROC      = 0x7fffffff, //!< See LOPROC.
+    SHT_HIPROC      = 0x7fffffff, //!< Values between LOPROC and HIPROC (inclusively) are reserved for processor specific semantics.
 
     /*Section types between SHT_LOUSER and SHT_HIUSER may be used by
       the application, without conflicting with current or future system-defined section
