@@ -1,5 +1,12 @@
 #include "ELFFile.hpp"
 #include <stdio.h>
+
+#if defined(__sun) && defined(__SVR4)
+typedef long id_t;
+typedef id_t ctid_t;
+typedef id_t zoneid_t;
+#endif
+
 #include <stdlib.h>
 
 using namespace std;

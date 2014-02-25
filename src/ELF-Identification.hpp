@@ -32,8 +32,24 @@ enum e_ident_offsets
     EI_CLASS    = 4, //!< File class/capacity.
     E_DATA      = 5, //!< Data encoding. ?
     EI_VERSION  = 6, //!< ELF Header version.
-    EI_PAD      = 7, //!< Start of padding bytes.
+    EI_OSABI    = 7, //!< Identiﬁes the operating system and ABI for which the object is prepared.
+    EI_ABIVERSION = 8, //!< OS/ABI version.
+    EI_PAD      = 9, //!< Start of padding bytes.
     EI_NIDENT   = 16 //!< Size of e_ident
+};
+
+enum e_ident_osabi
+{
+    ELFOSABI_SYSV       = 0x0, //!< System V ABI
+    ELFOSABI_HPUX       = 0x1, //!< HB-UX ABI
+    ELFOSABI_NETBSD     = 0x2, //!< NetBSD ABI
+    ELFOSABI_LINUX      = 0x3, //!< Linux ABI
+    ELFOSABI_SOLARIS    = 0x6, //!< Solaris ABI
+    ELFOSABI_AIX        = 0x7, //!< AIX ABI
+    ELFOSABI_IRIX       = 0x8, //!< IRIX ABI
+    ELFOSABI_FREEBSD    = 0x09,//!< FreeBSD ABI
+    ELFOSABI_OPENBSD    = 0x0C,//!< OpenBSD ABI
+    ELFOSABI_STANDALONE = 0xFF //!< Standalone/embedded.
 };
 
 #endif // ELFIDENTIFICATION_HPP

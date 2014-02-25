@@ -39,6 +39,7 @@ void ELFFile::printIdentificationBytes()
     printClass();
     printDataEncoding();
     printConditional("[ELF] Header Version", "current", elfHeader->e_version == EV_CURRENT);
+    printOSABI();
 }
 
 void ELFFile::printMachine()
@@ -94,4 +95,23 @@ void ELFFile::printDataEncoding()
         default: printf("unkown: %#08x", elfHeader->e_ident[E_DATA]);
     }
     printf(".\n");
+}
+void ELFFile::printOSABI()
+{
+    printf("[ELF] OS/ABI is ");
+    switch(elfHeader->e_ident[EI_OSABI])
+    {
+        case ELFOSABI_AIX: printf("AIX"); break;
+        case ELFOSABI_FREEBSD: printf("FreeBSD"); break;
+        case ELFOSABI_HPUX: printf("HP-UX"); break;
+        case ELFOSABI_IRIX: printf("IRIX"); break;
+        case ELFOSABI_LINUX: printf("Linux"); break;
+        case ELFOSABI_NETBSD: printf("NetBSD"); break;
+        case ELFOSABI_OPENBSD: printf("OpenBSD"); break;
+        case ELFOSABI_SOLARIS: printf("Solaris"); break;
+        case ELFOSABI_STANDALONE: printf("Embedded/standalone"); break;
+        case ELFOSABI_SYSV: printf("UNIX - SystemV"); break;
+        default: printf("unkown: %#08x", elfHeader->e_ident[EI_OSABI]);
+    }
+    printf(" version %d.\n", elfHeader->e_ident[EI_ABIVERSION]);
 }

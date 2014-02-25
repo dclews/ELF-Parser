@@ -14,15 +14,16 @@ private:
     const char* elfFile;
     const Elf32Ehdr* elfHeader;
 
+public:
+    ELFFile(const char* elfFile);
+    void Print();
+    void printOSABI();
     bool validMagic();
     void printMachine();
     void printType();
     void printClass();
     void printIdentificationBytes();
     void printDataEncoding();
-public:
-    ELFFile(const char* elfFile);
-    void Print();
 };
 
 #endif // ELFFILE_HPP
