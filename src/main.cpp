@@ -13,19 +13,26 @@ int main(int argc, char** argv)
 
     FILE* f = fopen(file, "rb");
 
-    fseek(f, 0, SEEK_END);
-    long fsize = ftell(f);
-    fseek(f, 0, SEEK_SET);
+    if(f!=NULL)
+    {
+        fseek(f, 0, SEEK_END);
+        long fsize = ftell(f);
+        fseek(f, 0, SEEK_SET);
 
-    char* elfBuffer = (char*) malloc(fsize + 1);
-    fread(elfBuffer, fsize, 1, f);
+        char* elfBuffer = (char*) malloc(fsize + 1);
+        fread(elfBuffer, fsize, 1, f);
 
-    fclose(f);
-    elfBuffer[fsize] = 0;
+        fclose(f);
+        elfBuffer[fsize] = 0;
 
-    ELFFile elf(elfBuffer);
-    elf.Print();
-
+        ELFFile elf(elfBuffer);
+        elf.Print();
+    }
+    else
+    {
+        printf("Failed to open file %s\n", file);
+        return 1;
+    }
 
     return 0;
 }
