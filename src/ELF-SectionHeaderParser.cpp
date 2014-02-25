@@ -2,7 +2,7 @@
 
 SHTParser::SHTParser(const Elf32Ehdr* elfHeader) : elfHeader(elfHeader), sectionHeaderBase(((const char*) elfHeader) + elfHeader->e_shoff)
 {
-    strtab = (Elf32_Shdr*) (sectionHeaderBase + (elfHeader->e_shentsize * elfHeader->e_shstrndx));
+    shstrtab = (Elf32_Shdr*) (sectionHeaderBase + (elfHeader->e_shentsize * elfHeader->e_shstrndx));
 }
 void SHTParser::print()
 {
@@ -12,7 +12,7 @@ void SHTParser::print()
         return;
     }
     printf("Number of section headers: %u\n", elfHeader->e_shnum);
-    printf("%-5s%-12s%-14s%-8s\n", "[ #]", "Name", "Type", "Flags");
+    printf("%-5s%-25s%-14s%-8s\n", "[ #]", "Name", "Type", "Flags");
 
     const char* sectionHeaderBase = ((const char*) elfHeader) + elfHeader->e_shoff;
 
@@ -58,8 +58,7 @@ void SHTParser::printType(const Elf32_Shdr* sectionHeader)
 }
 void SHTParser::printName(const Elf32_Shdr* sectionHeader)
 {
-    printf("%-12s", " ");
-    //printf("%s", ((const char*) strtab) + strtab->sh_size + sectionHeader->sh_name);
+    printf("%-25s", (char*) elfHeader + shstrtab->sh_offset + sectionHeader->sh_name);
 }
 void SHTParser::printFlags(const Elf32_Shdr* sectionHeader)
 {

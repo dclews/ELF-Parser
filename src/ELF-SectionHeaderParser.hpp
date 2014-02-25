@@ -9,7 +9,7 @@ class SHTParser
 {
 private:
     const Elf32Ehdr* elfHeader;
-    Elf32_Shdr* strtab;
+    Elf32_Shdr* shstrtab;
     const char* sectionHeaderBase;
     void printHeaders();
     void printHeader(const Elf32_Shdr* sectionHeader);
