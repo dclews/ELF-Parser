@@ -24,7 +24,6 @@ namespace ELF
         const Elf32Ehdr* elfHeader;
         Elf32_Shdr* shstrtab;
         const char* sectionHeaderBase;
-        void printHeaders();
         void printHeader(const Elf32_Shdr* sectionHeader);
         void typeToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen);
         void nameToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen);

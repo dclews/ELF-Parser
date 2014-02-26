@@ -75,25 +75,22 @@ namespace ELF
     }
     void SHTParser::flagsToString(const Elf32_Shdr* sectionHeader, char* buffer, size_t maxlen)
     {
-        char flagStr[5];
-        memset(flagStr, 0, sizeof(char));
-
+        memset(buffer, 0, 4);
         if(sectionHeader->sh_flags & SHF_ALLOC)
         {
-            sprintf(flagStr, "A");
+            sprintf(buffer, "A");
         }
         if(sectionHeader->sh_flags & SHF_EXECINSTR)
         {
-            sprintf(flagStr + strlen(flagStr), "X");
+            sprintf(buffer + strlen(buffer), "X");
         }
         if(sectionHeader->sh_flags & SHF_WRITE)
         {
-            sprintf(flagStr + strlen(flagStr), "W");
+            sprintf(buffer + strlen(buffer), "W");
         }
         if(sectionHeader->sh_flags & SHF_MASKPROC)
         {
-            sprintf(flagStr + strlen(flagStr), "MS");
+            sprintf(buffer + strlen(buffer), "MS");
         }
-        printf("%-8s", flagStr);
     }
 }

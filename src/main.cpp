@@ -18,7 +18,8 @@ int main(int argc, char** argv)
 
     const char* file = (argc > 1) ? argv[1] : "bash";
 
-    FILE* f = fopen(file, "rb");
+    printf("Parsing file: %s\n", file);
+    FILE* f = fopen(file, "rbw");
 
     if(f!=NULL)
     {
@@ -29,11 +30,11 @@ int main(int argc, char** argv)
         char* elfBuffer = (char*) malloc(fsize + 1);
         fread(elfBuffer, fsize, 1, f);
 
-        fclose(f);
-        elfBuffer[fsize] = 0;
-
         ELFFile elf(elfBuffer);
         elf.Print();
+
+        fclose(f);
+        elfBuffer[fsize] = 0;
     }
     else
     {
