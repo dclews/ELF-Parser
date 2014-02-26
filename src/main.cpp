@@ -13,9 +13,6 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    //FILE *f = fopen("/usr/lib32/libpng.so", "rb");
-    //FILE *f = fopen("/home/dan/ELF-Files/bash", "rb");
-
     const char* file = (argc > 1) ? argv[1] : "bash";
 
     printf("Parsing file: %s\n", file);
